@@ -1,4 +1,4 @@
-# nso-device-onboarding
+#nso-device-onboarding
 This playbook can be used to onboard devices into NSO. It will create an authgroup, add it to NSO, fetch SSH keys and perform a sync-from.
 
 This playbook assumes that the device will be using SSH and the Cisco IOS NED for now.
