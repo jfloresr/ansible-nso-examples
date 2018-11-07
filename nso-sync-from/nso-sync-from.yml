@@ -1,0 +1,28 @@
+---
+
+- name: Perform a sync from on a given device
+  hosts: localhost
+  gather_facts: no
+  connection: local
+
+  tasks:
+  - name: NSO global variables
+    include_vars:
+      #The NSO YAML file will include the url for NSO with the jsonrpc resource
+      #(e.g. http://localhost:8080/jsonrpc), the username and the password
+      file: nso.yml
+      name: nso
+
+  - name: Device global variables
+    include_vars:
+      file: device.yml
+      name: device
+
+    - name: Show devices including operational data
+      nso_action:
+        url: "{{ nso.url }}"
+        username: "{{ nso.username }}"
+        password: "{{ nso.password }}"
+        path: /ncs:devices/device{'{{ device.hostname }}'}/sync-from
+        #For all devices comment above and uncomment the line below
+        #path: /ncs:devices/sync-from

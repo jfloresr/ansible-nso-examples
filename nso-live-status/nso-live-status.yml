@@ -1,0 +1,37 @@
+---
+
+- name: Show Devices Config
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  tasks:
+  - name: NSO global variables
+    include_vars:
+      #The NSO YAML file will include the url for NSO with the jsonrpc resource
+      #(e.g. http://localhost:8080/jsonrpc), the username and the password
+      file: nso.yml
+      name: nso
+
+  - name: Device global variables
+    include_vars:
+      file: device.yml
+      name: device
+
+  - name: Execute show version on given device
+    nso_action:
+      url: "{{ nso.url }}"
+      username: "{{ nso.username }}"
+      password: "{{ nso.password }}"
+      path: "/ncs:devices/device{'{{ device.hostname }}'}/live-status/ios-stats:exec/any"
+      input:
+        args: [ "show version" ]
+    register: show_version
+
+  - local_action: copy content={{ show_version }} dest=show_version_{{ device.hostname }}.log
+
+  - name: normalize show version
+    command: ./normalize_show.py
+    delegate_to: localhost
+    run_once: true
+

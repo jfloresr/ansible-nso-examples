@@ -1,0 +1,20 @@
+---
+
+- name: Fetch SSH Keys
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+
+  tasks:
+  - name: NSO global variables
+    include_vars:
+      file: nso.yml
+      name: nso
+
+  - name: Fetch Keys
+    nso_action:
+      url: "{{ nso.url }}"
+      username: "{{ nso.username }}"
+      password: "{{ nso.password }}"
+      path: /ncs:devices/fetch-ssh-host-keys

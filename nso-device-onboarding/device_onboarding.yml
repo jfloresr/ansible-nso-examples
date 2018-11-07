@@ -1,0 +1,66 @@
+---
+
+- name: Onboard a device to NSO (IOS/XE)
+  hosts: localhost
+  connection: local
+  gather_facts: no
+ 
+  tasks:
+  - name: NSO global variables
+    include_vars:
+      #The NSO YAML file will include the url for NSO with the jsonrpc resource
+      # (e.g. http://localhost:8080/jsonrpc), the username and the password
+      file: nso.yml
+      name: nso
+
+  - name: Device global variables
+    include_vars:
+      file: device.yml
+      name: device
+
+  - name: Creating authgroup
+    nso_config:
+      url: "{{ nso.url }}"
+      username: "{{ nso.username }}"
+      password: "{{ nso.password }}"
+      data:
+         tailf-ncs:devices:
+           authgroups:
+             group:
+             - name: "{{ device.username }}"
+               default-map:
+                 remote-name: "{{ device.username }}"
+                 remote-password: "{{ device.password }}"
+
+  - name: Onboarding CSR device
+    nso_config:
+      url: "{{ nso.url }}"
+      username: "{{ nso.username }}"
+      password: "{{ nso.password }}"
+      data:
+         tailf-ncs:devices:
+           device:
+           - name: "{{ device.hostname }}"
+             address: "{{ device.ip }}"
+             authgroup: "{{ device.username }}"
+             port: 22
+             state:
+               admin-state: unlocked
+             device-type: 
+               cli:
+                 ned-id: tailf-ned-cisco-ios-id:cisco-ios
+                 protocol: ssh
+
+  - name: Fetch Keys
+    nso_action:
+      url: "{{ nso.url }}"
+      username: "{{ nso.username }}"
+      password: "{{ nso.password }}"
+      path: /ncs:devices/fetch-ssh-host-keys
+
+  - name: Sync From
+    nso_action:
+      url: "{{ nso.url }}"
+      username: "{{ nso.username }}"
+      password: "{{ nso.password }}"
+      path: /ncs:devices/device{'{{ device.hostname }}'}/sync-from  

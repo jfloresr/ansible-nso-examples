@@ -1,0 +1,6 @@
+---
+hostname: csr1000v-2
+ip: 172.16.1.192
+username: cisco
+password: cisco
+

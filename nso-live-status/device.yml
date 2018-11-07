@@ -1,0 +1,6 @@
+---
+hostname: <device-name>
+ip: 1.1.1.1
+username: cisco
+password: cisco
+
