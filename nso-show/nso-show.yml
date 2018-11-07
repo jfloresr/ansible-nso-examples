@@ -18,10 +18,10 @@
       file: device.yml
       name: device
 
-    - name: Show devices including operational data
-      nso_show:
-        url: "{{ nso.url }}"
-        username: "{{ nso.username }}"
-        password: "{{ nso.password }}"
-        path: /ncs:devices/device{'{{ device.hostname }}'}/config/ios:interface/..
-        operational: false
+  - name: Show devices including operational data
+    nso_show:
+      url: "{{ nso.url }}"
+      username: "{{ nso.username }}"
+      password: "{{ nso.password }}"
+      path: /ncs:devices/device{'{{ device.hostname }}'}/config
+      operational: false
