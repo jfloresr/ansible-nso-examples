@@ -1,5 +1,8 @@
 ---
-hostname: csr1000v-2
-ip: 172.16.1.192
+hostname: iox1
+ip: 127.0.0.1
+protocol: ssh
+port: 12022
+nedid: cisco-ios-xr
 username: cisco
 password: cisco

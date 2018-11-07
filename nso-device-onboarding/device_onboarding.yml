@@ -1,6 +1,6 @@
 ---
 
-- name: Onboard a device to NSO (IOS/XE)
+- name: Onboard a device to NSO
   hosts: localhost
   connection: local
   gather_facts: no
@@ -32,7 +32,7 @@
                  remote-name: "{{ device.username }}"
                  remote-password: "{{ device.password }}"
 
-  - name: Onboarding CSR device
+  - name: Onboarding {{ device.hostname }} device
     nso_config:
       url: "{{ nso.url }}"
       username: "{{ nso.username }}"
@@ -43,13 +43,13 @@
            - name: "{{ device.hostname }}"
              address: "{{ device.ip }}"
              authgroup: "{{ device.username }}"
-             port: 22
+             port: "{{ device.port }}"
              state:
                admin-state: unlocked
              device-type: 
                cli:
-                 ned-id: tailf-ned-cisco-ios-id:cisco-ios
-                 protocol: ssh
+                 ned-id: tailf-ned-{{ device.nedid }}-id:{{ device.nedid }}
+                 protocol: "{{ device.protocol }}"
 
   - name: Fetch Keys
     nso_action:
