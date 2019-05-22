@@ -56,7 +56,7 @@
       url: "{{ nso.url }}"
       username: "{{ nso.username }}"
       password: "{{ nso.password }}"
-      path: /ncs:devices/fetch-ssh-host-keys
+      path: /ncs:devices/device{'{{ device.hostname }}'}/ssh/fetch-host-keys
 
   - name: Sync From
     nso_action:
